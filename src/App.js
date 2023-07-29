@@ -8,6 +8,7 @@ import About from './components/About/about';
 import Detail from './components/Detail/Detail';
 import Error404 from './components/error404/Error404';
 import Form from './components/form/Form';
+import Favorites from './components/favorites/Favorites'
 
 
 function App() {
@@ -15,21 +16,21 @@ function App() {
    const {pathname} = useLocation();
    const [characters, setCharacters] = useState([])
    const [access, setAccess] = useState(false)
+   const URL ='http://localhost:3001/rickandmorty/'
     
-   const EMAIL = 'maharba0717@gmail.com';
-   const PASSWORD = 'Pirulin1';
-
-   function login(userData){
-      if(userData.password === PASSWORD && userData.email === EMAIL){
-         setAccess(true)
-         navigate('/home')
-      }
+   function login({email, password}){
+      axios(`${URL}login?email=${email}&password=${password}`)
+      .then (({data})=>{
+         const {access} = data;
+         setAccess(access)
+         access && navigate('/home')
+      })
    }
 
    useEffect(()=>{
       !access && navigate('/');
 
-   },[access, navigate]);
+   },[access]);
 
 
    function onSearch(id) {
@@ -42,7 +43,7 @@ function App() {
 
       try {
          
-         axios(`https://rickandmortyapi.com/api/character/${id}`)
+         axios(`http://localhost:3001/rickandmorty/character/${id}`)
          .then(({ data }) => {
             
             if (data.name) {
@@ -52,7 +53,7 @@ function App() {
             }
          
          })
-         .catch(err => alert(err.response.data.error) )
+         .catch(error => window.alert(error.message))
 
       } catch (error) {
          
@@ -74,6 +75,7 @@ function App() {
             <Cards characters={characters} onClose = {onClose} />}/>
             <Route path='/About' element={<About/>}/>
             <Route path='/detail/:id' element={<Detail/>}/>
+            <Route path='/favorites' element={<Favorites/>}/>
             <Route path='*' element={<Error404/>}/>
          </Routes>
       </div>

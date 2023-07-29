@@ -8,7 +8,7 @@ function Detail() {
     const [characterDetail, setCharacterDetail] = useState({})
 
     useEffect(() => {
-        fetch(`https://rickandmortyapi.com/api/character/${id}`)
+        fetch(`http://localhost:3001/rickandmorty/character/${id}`)
         .then (response => response.json())
         .then((data) => {
            if (data.name) {
@@ -66,7 +66,7 @@ function Detail() {
             border:"1px solid black",
             fontSize:15,
             backgroundColor:'rgba(31, 28, 31, 0.8)', 
-         }}>{characterDetail.origin?.name}
+         }}>{characterDetail.origin.url}
          </h4>
         <img src={characterDetail.image} alt={characterDetail.name} />
 
